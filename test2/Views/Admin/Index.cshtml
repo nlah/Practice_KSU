@@ -1,0 +1,89 @@
+﻿@model List<test2.Models.Type_model>
+<table class="table">
+    <tr>
+        <th>Type</th>
+        <th>Teg</th>
+    </tr>
+
+@using (Html.BeginForm("Add_tag_rel", "Admin"))
+{
+    <tr>
+        <td>
+            @Html.TextBox("Type");
+        </td>
+        <td>
+            @Html.TextBox("Tag");
+        </td>
+        <td>
+            <input type="submit" value="Add rel">
+        </td>
+    </tr>
+
+}
+    @using (Html.BeginForm("del_tag_rel", "Admin"))
+    {
+        <tr>
+            <td>
+                @Html.TextBox("Type");
+            </td>
+            <td>
+                @Html.TextBox("Tag");
+            </td>
+            <td>
+                <input type="submit" value="del rel">
+            </td>
+        </tr>
+    }
+    <tr>
+        <th>Tag</th>
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Add_tag", "Admin"))
+        {
+            <td>
+                @Html.TextBox("name");
+            </td>
+            <td>
+                <input type="submit" value="Add">
+            </td>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("del_tag", "Admin"))
+        {
+            <td>
+                @Html.TextBox("name");
+            </td>
+            <td>
+                <input type="submit" value="del">
+            </td>
+        }
+    </tr>
+
+    <tr>
+        <th>Type</th>
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Add_type", "Admin"))
+        {
+            <td>
+                @Html.TextBox("name");
+            </td>
+            <td>
+                <input type="submit" value="Add">
+            </td>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("det_type", "Admin"))
+        {
+            <td>
+                @Html.TextBox("name");
+            </td>
+            <td>
+                <input type="submit" value="del">
+            </td>
+        }
+    </tr>
+
+</table>

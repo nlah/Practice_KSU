@@ -1,0 +1,9 @@
+CREATE CONSTRAINT ON (n:type_standart) ASSERT n.name IS UNIQUE;
+CREATE CONSTRAINT ON (n:tag) ASSERT n.name IS UNIQUE;
+CREATE CONSTRAINT ON (n:User) ASSERT n.Email IS UNIQUE;
+CREATE CONSTRAINT ON (n:User) ASSERT n.Id IS UNIQUE;
+CREATE (n:type_standart{name:'Спорт'})
+CREATE (n:type_standart{name:'Автомобили'})
+CREATE (n:type_standart{name:'Недвижимость'})
+CREATE (n:type_standart{name:'Робота'})
+CREATE (n:type_standart{name:'Другое'})

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<test2.Models.Ad_model>
+
+<p>
+    @Html.ActionLink("Create New", "Add_ad")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.header)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tags)
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.data)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.header)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.type)
+        </td>
+        <td>
+            <style>
+                #black, #red {
+                    display: inline-block;
+                }
+            </style>
+            <div style="float:left;">
+                @foreach (var j in item.tags_list)
+                {
+                    <div id="black">
+                        @Html.ActionLink(j, "tag", "Search", new { tag = j }, null)
+                    </div>
+                }
+            </div>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.data)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Del_user", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

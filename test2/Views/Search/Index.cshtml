@@ -1,0 +1,67 @@
+﻿@model List<test2.Models.Ad_model>
+@{
+    ViewBag.Title = "Home Page";
+}
+@if (ViewData.ContainsKey("tags_search"))
+{
+<div>
+
+    <style>
+        #black, #red {
+            display: inline-block;
+        }
+    </style>
+  
+    <div style="float:left;">
+        @foreach (test2.Models.Tag_model j in (List<test2.Models.Tag_model>)ViewData["tags_search"])
+        {
+            <div id="black">
+                @Html.ActionLink(j.name, "tag", "Search", new { tag = j.name }, null)
+            </div>
+        }
+
+    </div>
+</div>
+}
+@foreach (var i in Model)
+{
+    <div class="row">
+        <div class="col-md-4">
+
+            <h3>@i.header</h3>
+            <h4>@Html.ActionLink(i.type, "type", "Search", new { type = i.type }, null)</h4>
+            <style>
+                #black, #red {
+                    display: inline-block;
+                }
+            </style>
+            <div style="float:left;">
+                @foreach (var j in i.tags_list)
+                {
+                    <div id="black">
+                        @Html.ActionLink(j, "tag", "Search", new { tag = j }, null)
+                    </div>
+                }
+            </div>
+            <br>
+            <p>@i.data </p>
+
+
+            @if (User.IsInRole("Admin"))
+            {
+                    @Ajax.ActionLink("Delete", "Del_user", new { id = i.id },
+                    new AjaxOptions
+                    {
+                        HttpMethod = "POST",
+                        OnSuccess = "onDeleteSuccess",
+                        Confirm = "Are you sure you want to delete this?"
+                    },
+                    new { @class = "href", id = "delete" })
+            @Html.ActionLink("Edit", "Edit", new { id = i.id }) 
+
+            }
+        </div>
+    </div>
+}
+@Html.ActionLink("Pre", "Index", "Search", new { id = ((int)ViewData["id"] - 1), search = ViewData["search"], fun = ViewData["fuck"] }, null)
+@Html.ActionLink("Next", "Index", "Search", new {id = ((int)ViewData["id"] + 1) , search = ViewData["search"],fun = ViewData["fuck"] },null)
