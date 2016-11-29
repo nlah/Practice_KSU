@@ -104,16 +104,10 @@ namespace test2.Models
             }
             return test;
         }
-        public List<Ad_model> Search_all(string Search,int lim=25)
+        public List<Ad_model> Search_all(string Search,int lim=25,int skip=0)
         {
-            //List<Ad_model> data = new List<Ad_model>();
-            var test_q = Ad_model_list(query("MATCH(n: ad) where n.header=~'.*(?i)" + Search+ ".*'  RETURN n LIMIT " + lim + " ").Select(n => (INode)n["n"]).ToList());
-            //var a = this.Search.Retrieve(Search).Select(b => b.Key).ToList();
-            //foreach (var i in a)
-            //{
-            //    var inf = this.ads_name(i);
-            //    data.AddRange(inf);
-            //}
+            var test_q = Ad_model_list(query("MATCH(n: ad) where n.header=~'.*(?i)" + Search+ ".*'  RETURN n ORDER BY n.time desc skip "+ skip+ " LIMIT " + lim + " ").Select(n => (INode)n["n"]).ToList());
+
             return test_q;
         }
         public List<Ad_model> ads()
@@ -124,13 +118,13 @@ namespace test2.Models
         {
             return Ad_model_list(query("match (a:ad)  return a ORDER BY a.time desc skip " + skip + " LIMIT " + limit + " ").Select(a => (INode)a["a"]).ToList());
         }
-        public List<Ad_model> ads_tag(string tag)
+        public List<Ad_model> ads_tag(string tag, int lim = 25, int skip = 0)
         {
-            return Ad_model_list(query("match (a:ad)-[:tag]-(b:tag{name:'" + tag + "'})  return a ORDER BY a.time").Select(a => (INode)a["a"]).ToList());
+            return Ad_model_list(query("match (n:ad)-[:tag]-(b:tag{name:'" + tag + "'}) RETURN n ORDER BY n.time desc skip " + skip + " LIMIT " + lim + " ").Select(a => (INode)a["n"]).ToList());
         }
-        public List<Ad_model> ads_type(string type)
+        public List<Ad_model> ads_type(string type, int lim = 25, int skip = 0)
         {
-            return Ad_model_list(query("match (a:ad)-[:type]-(b:type_standart{name:'" + type + "'})  return a").Select(a => (INode)a["a"]).ToList());
+            return Ad_model_list(query("match (n:ad)-[:type]-(b:type_standart{name:'" + type + "'})  RETURN n ORDER BY n.time desc skip " + skip + " LIMIT " + lim + " ").Select(a => (INode)a["n"]).ToList());
         }
         public List<Ad_model> ads_type_tage(string type, string tag)
         {
