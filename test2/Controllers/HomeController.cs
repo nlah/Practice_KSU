@@ -40,7 +40,7 @@ namespace test2.Controllers
         public ActionResult Add_ad()
         {
             var inf = new Models.Ad_model();
-            inf.tags_list =type_standart.get_name_list().Select(a=>a.name).ToList();
+            inf.tags_list = type_standart.get_name_list().Select(a => a.name).ToList();
             return View(inf);
 
         }
@@ -57,7 +57,7 @@ namespace test2.Controllers
             {
                 Models.Ad ts = Models.Ad.GetInstance();
                 List<string> Teg = bane.tags.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                if(!ts.create(User.Identity.GetUserId(), bane.type, Teg, bane.header, bane.data)) return View(bane);
+                if (!ts.create(User.Identity.GetUserId(), bane.type, Teg, bane.header, bane.data, bane.Price)) return View(bane);
                 return View("Index", ts.ads(5, 0));
             }
 
@@ -72,8 +72,8 @@ namespace test2.Controllers
         [HttpPost]
         public string Contact(Ad_model names)
         {
-            string fin = names.data+ names.header;
-           
+            string fin = names.data + names.header;
+
             return fin;
         }
 
@@ -93,10 +93,10 @@ namespace test2.Controllers
                 user.Del_node(inf.Ad_user_id(long.Parse(id)), id.ToString());
                 return View("Ad_user", inf.User_ad(User.Identity.GetUserId()));
             }
-            else if(User.IsInRole("User"))
+            else if (User.IsInRole("User"))
                 user.Del_node(User.Identity.GetUserId(), id.ToString());
             return View("Ad_user", inf.User_ad(User.Identity.GetUserId()));
-            
+
         }
         [Authorize]
         public ActionResult Edit(long id)

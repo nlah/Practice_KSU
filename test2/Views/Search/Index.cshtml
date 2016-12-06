@@ -1,55 +1,65 @@
-﻿@model List<test2.Models.Ad_model>
-@{
-    ViewBag.Title = "Home Page";
-}
-@if (ViewData.ContainsKey("tags_search"))
-{
-<div>
-
-    <style>
-        #black, #red {
-            display: inline-block;
-        }
-    </style>
-  
-    <div style="float:left;">
-        @foreach (test2.Models.Tag_model j in (List<test2.Models.Tag_model>)ViewData["tags_search"])
-        {
-            <div id="black">
-                @Html.ActionLink(j.name, "tag", "Search", new { tag = j.name }, null)
-            </div>
-        }
-
-    </div>
-</div>
-}
-@foreach (var i in Model)
-{
-    <div class="row">
-        <div class="col-md-4">
-
-            <h3>@i.header</h3>
-            <h4>@Html.ActionLink(i.type, "type", "Search", new { type = i.type }, null)</h4>
+﻿  @model List<test2.Models.Ad_model>
+    @{
+        ViewBag.Title = "Ad-Desc";
+    }
+    @if (ViewData.ContainsKey("tags_search"))
+    {
+        <div>
             <style>
                 #black, #red {
                     display: inline-block;
                 }
             </style>
+
             <div style="float:left;">
-                @foreach (var j in i.tags_list)
+                @foreach (test2.Models.Tag_model j in (List<test2.Models.Tag_model>)ViewData["tags_search"])
                 {
                     <div id="black">
-                        @Html.ActionLink(j, "tag", "Search", new { tag = j }, null)
+                        @Html.ActionLink(j.name, "tag", "Search", new { tag = j.name }, null)
                     </div>
                 }
             </div>
-            <br>
-            <p>@i.data </p>
+        </div>
+    }
+    @foreach (var i in Model)
+    {
+        <h2>
+            <strong>@i.header</strong>
+        </h2>
+        <div class="well">
+            <div class="row">
 
+                <div class="col-xs-10">
+                    @if (i.type != null)
+                    {
+                        <h4>Категория - @Html.ActionLink(i.type, "type", "Search", new { type = i.type }, null)</h4>
+                    }
+                    <h5>
+                        Теги:
+                        @foreach (var j in i.tags_list)
+                        {
+                            <button type="submit" class="btn btn-default btn-sm">@Html.ActionLink(j, "tag", "Search", new { tag = j }, null)</button>
+                        }
+                    </h5>
+
+                </div>
+                <div class="col-xs-2">
+                    <h3>
+                        <strong class="pull-right label label-primary">
+                           @i.Price
+                        </strong>
+                    </h3>
+                </div>
+            </div>
+            <span class="lead">@i.data</span>
+
+            <strong class="pull-right label label-primary">
+                @i.Email
+            </strong>
 
             @if (User.IsInRole("Admin"))
             {
-                    @Ajax.ActionLink("Delete", "Del_user", new { id = i.id },
+                @Ajax.ActionLink("Delete", "Del_user", new { id = i.id },
                     new AjaxOptions
                     {
                         HttpMethod = "POST",
@@ -57,11 +67,17 @@
                         Confirm = "Are you sure you want to delete this?"
                     },
                     new { @class = "href", id = "delete" })
-            @Html.ActionLink("Edit", "Edit", new { id = i.id }) 
-
+                @Html.ActionLink("Edit", "Edit", new { id = i.id })
             }
         </div>
-    </div>
-}
-@Html.ActionLink("Pre", "Index", "Search", new { id = ((int)ViewData["id"] - 1), search = ViewData["search"], fun = ViewData["fuck"] }, null)
-@Html.ActionLink("Next", "Index", "Search", new {id = ((int)ViewData["id"] + 1) , search = ViewData["search"],fun = ViewData["fuck"] },null)
+    }
+    @if (((int)ViewData["id"]) != 0)
+    {
+        <button type="submit" class="pull-left btn btn-default">
+            @Html.ActionLink("Предыдущая", "Index", "Home", new { id = ((int)ViewData["id"] - 1) }, null)
+        </button>
+    }
+    <button type="submit" class="pull-right btn btn-default">
+        @Html.ActionLink("Следущая", "Index", "Home", new { id = ((int)ViewData["id"] + 1) }, null)
+    </button>
+
