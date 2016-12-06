@@ -28,21 +28,19 @@ namespace test2.Controllers
             if (id < 0) id = 0;
             Ad inf = Ad.GetInstance();
             var data = inf.ads(5, 5 * id);
-            data = inf.ads(5, 5 * id);
+            if (data.Count == 0)
+            {
+                id--;
+                data = inf.ads(5, 5 * id);
+            }
             ViewData["id"] = id;
             return View(data);
-        }
-        [HttpPost]
-        public ActionResult Index(string Search)
-        {
-            Ad inf = Ad.GetInstance();
-            return View(inf.Search_all(Search));
         }
         [Authorize]
         public ActionResult Add_ad()
         {
             var inf = new Models.Ad_model();
-            inf.tags_list =type_standart.get_name_list().Select(a=>a.name).ToList();
+            inf.tags_list = type_standart.get_name_list().Select(a => a.name).ToList();
             return View(inf);
 
         }
@@ -57,12 +55,10 @@ namespace test2.Controllers
                 ViewBag.Message += a.ErrorMessage;
             if (ModelState.IsValid)
             {
-                User.Identity.GetUserId();
-                var id = Models.user.users_find(User.Identity.GetUserId());
                 Models.Ad ts = Models.Ad.GetInstance();
                 List<string> Teg = bane.tags.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                if(!ts.create(User.Identity.GetUserId(), bane.type, Teg, bane.header, bane.data)) return View(bane);
-                return View("Index", Ad.GetInstance().ads(10, 0));
+                if (!ts.create(User.Identity.GetUserId(), bane.type, Teg, bane.header, bane.data, bane.Price)) return View(bane);
+                return View("Index", ts.ads(5, 0));
             }
 
             return View(bane);
@@ -76,8 +72,8 @@ namespace test2.Controllers
         [HttpPost]
         public string Contact(Ad_model names)
         {
-            string fin = names.data+ names.header;
-           
+            string fin = names.data + names.header;
+
             return fin;
         }
 
@@ -97,10 +93,10 @@ namespace test2.Controllers
                 user.Del_node(inf.Ad_user_id(long.Parse(id)), id.ToString());
                 return View("Ad_user", inf.User_ad(User.Identity.GetUserId()));
             }
-            else if(User.IsInRole("User"))
+            else if (User.IsInRole("User"))
                 user.Del_node(User.Identity.GetUserId(), id.ToString());
             return View("Ad_user", inf.User_ad(User.Identity.GetUserId()));
-            
+
         }
         [Authorize]
         public ActionResult Edit(long id)
